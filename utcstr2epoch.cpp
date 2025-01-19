@@ -5,12 +5,14 @@
 #include <iomanip>
 #include <time.h>
 
+/* Returns -1 on error. fmtstr is according to strptime() */
+
 extern "C"
 int utcstr2epoch(const char* timestr, const char* fmtstr, struct tm* output)
 {
   std::tm t = {}; // tm_isdst = 0, don't think about it please, this is UTC
   std::istringstream ss(timestr);
-  ss.imbue(std::locale());
+  ss.imbue(std::locale()); // "LANG=C", but local
   
   ss >> std::get_time(&t, fmtstr);
   if (ss.fail()) 
